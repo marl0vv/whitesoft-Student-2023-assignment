@@ -9,5 +9,6 @@ https://github.com/thewhitesoft/student-2023-assignment#readme
 ## Как запускать
 Программа писалась и запускалась на Manjaro Linux в VS Code. Nlohmann json содержится в проекте в виде .hpp файла.
 Curlpp ставилась через установщик пакетов. VS Code должен определить CMakeLists.txt, собрать и запустить программу.
+
 result.json, содержащий выходные данные, будет находится в файле build.
 В папке program содержится файл WStest с готовой программой и result.json с выходными данными.
