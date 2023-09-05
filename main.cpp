@@ -30,20 +30,17 @@ int main(int, char**)
         std::string result = source;
         for (auto it = j_replacements.rbegin(); it != j_replacements.rend(); ++it)
         {
-            bool exit = false;
-            while (result.find(it->at("replacement")) != std::string::npos && !exit)
+            while (result.find(it->at("replacement")) != std::string::npos)
             {
                 size_t index = result.find(it->at("replacement"));
                 size_t len = (*it)["replacement"].get_ref<json::string_t &>().size();
                 if (it->at("source") == nullptr)
                 {
-                    exit = true;
                     result.erase(index, len);
                     continue;
                 }
                 result.replace(index, len, it->at("source"));
-            }
-            
+            }           
         }
         if (result.size() > 0)
         {
