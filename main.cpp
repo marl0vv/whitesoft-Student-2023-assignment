@@ -8,7 +8,9 @@
 #include <curlpp/Easy.hpp>
 #include "json.hpp"
 
-std::string get_data(std::string url)
+using json = nlohmann::json;
+
+std::string getDataCurl(std::string url)
 {
     curlpp::Cleanup cleaner;
     std::ostringstream os;
@@ -16,19 +18,22 @@ std::string get_data(std::string url)
     return os.str();
 }
 
-int main(int, char**) 
+nlohmann::json getDataFile(std::string fileName)
 {
     using json = nlohmann::json;
+    std::ifstream input(fileName);
+    json correctDataInput = json::parse(input);
+    
+    return correctDataInput;
+}
 
-    json j_inputData = json::parse(get_data("https://raw.githubusercontent.com/thewhitesoft/student-2023-assignment/main/data.json"));
-    json j_replacements = json::parse(get_data("https://raw.githubusercontent.com/thewhitesoft/student-2023-assignment/main/replacement.json")); 
-  
-
+std::vector<std::string> dataPermutation(json inputData, json replacements)
+{
     std::vector<std::string> output;
-    for (auto const &source : j_inputData)
+    for (auto const &source : inputData)
     {
         std::string result = source;
-        for (auto it = j_replacements.rbegin(); it != j_replacements.rend(); ++it)
+        for (auto it = replacements.rbegin(); it != replacements.rend(); ++it)
         {
             while (result.find(it->at("replacement")) != std::string::npos)
             {
@@ -47,7 +52,17 @@ int main(int, char**)
             output.push_back(result);
         }
     }
-    json fileOutput = output;
+    return output;
+}
+
+/*int main(int, char**) 
+{
+   using json = nlohmann::json;
+
+    json j_inputData = json::parse(getDataCurl("https://raw.githubusercontent.com/thewhitesoft/student-2023-assignment/main/data.json"));
+    json j_replacements = json::parse(getDataCurl("https://raw.githubusercontent.com/thewhitesoft/student-2023-assignment/main/replacement.json")); 
+  
+    json fileOutput = dataPermutation(j_inputData, j_replacements);
 
     std::ofstream file;
     file.open("./result.json", std::fstream::out);
@@ -56,4 +71,4 @@ int main(int, char**)
         file << fileOutput;
     }
     return EXIT_SUCCESS;
-}
+}*/
